@@ -1,0 +1,231 @@
+﻿@page "/resume"
+@using DevPortfolio.Models
+@using DevPortfolio.Services
+@inject IResumeService ResumeService
+
+<PageTitle>Resume</PageTitle>
+
+<div class="container my-4 resume-page">
+
+    @if (_loading)
+    {
+        <p>Parsing resume…</p>
+    }
+    else if (!string.IsNullOrEmpty(_error))
+    {
+        <div class="alert alert-danger" style="white-space:pre-wrap">@_error</div>
+    }
+    else if (_data is not null)
+    {
+        <header class="resume-top d-flex flex-wrap justify-content-between align-items-center mb-3">
+            <div class="me-3">
+                <h2 class="mb-1">@_data.Candidate.Name</h2>
+
+                <div class="text-muted contact-row">
+                    @if (!string.IsNullOrWhiteSpace(_data.Candidate.Email))
+                    {
+                        <span><a href="mailto:@_data.Candidate.Email">@_data.Candidate.Email</a></span>
+                        <span class="sep">·</span>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(_data.Candidate.Phone))
+                    {
+                        <span>@_data.Candidate.Phone</span>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(_data.Candidate.PhoneOther))
+                    {
+                        <span class="sep">·</span>
+                        <span>@_data.Candidate.PhoneOther</span>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(_data.Candidate.GithubUrl))
+                    {
+                        <span class="sep">·</span>
+                        <a class="icon-btn" href="@_data.Candidate.GithubUrl" target="_blank" rel="noopener" aria-label="GitHub">
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.637 22.42c.575.105.787-.25.787-.556 0-.275-.01-1.003-.016-1.968-3.2.695-3.878-1.543-3.878-1.543-.523-1.328-1.277-1.681-1.277-1.681-1.044-.714.079-.699.079-.699 1.153.081 1.76 1.184 1.76 1.184 1.027 1.76 2.695 1.251 3.35.956.104-.744.402-1.252.731-1.541-2.555-.291-5.24-1.277-5.24-5.683 0-1.255.45-2.281 1.184-3.086-.118-.29-.513-1.462.112-3.049 0 0 .967-.31 3.17 1.178a10.98 10.98 0 0 1 2.886-.388c.98.004 1.968.132 2.892.388 2.201-1.49 3.166-1.178 3.166-1.178.628 1.587.233 2.759.115 3.049.737.805 1.183 1.83 1.183 3.086 0 4.417-2.69 5.388-5.255 5.673.413.353.78 1.047.78 2.112 0 1.526-.014 2.756-.014 3.13 0 .31.208.671.793.555A11.5 11.5 0 0 0 12 .5z" />
+                            </svg>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(_data.Candidate.LinkedinUrl))
+                    {
+                        <a class="icon-btn" href="@_data.Candidate.LinkedinUrl" target="_blank" rel="noopener" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor" d="M20.45 20.45h-3.555v-5.57c0-1.328-.025-3.037-1.852-3.037-1.853 0-2.136 1.448-2.136 2.945v5.662H9.35V9h3.414v1.56h.049c.475-.9 1.638-1.852 3.368-1.852 3.603 0 4.267 2.372 4.267 5.458v6.284zM5.337 7.433A2.063 2.063 0 1 1 5.332 3.31a2.063 2.063 0 0 1 .005 4.123zM7.116 20.45H3.56V9h3.556v11.45z" />
+                            </svg>
+                        </a>
+                    }
+                </div>
+            </div>
+
+            @if (ResumeService.GetResumeDocxUrl() is string url && !string.IsNullOrWhiteSpace(url))
+            {
+                <a class="btn-black ms-auto" href="@url" target="_blank" rel="noopener" download>
+                    Download
+                </a>
+            }
+        </header>
+
+        @if (!string.IsNullOrWhiteSpace(_data.Profile))
+        {
+            <section class="mb-4">
+                <h3>Profile</h3>
+                <p style="white-space:pre-wrap">@_data.Profile</p>
+            </section>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(_data.SkillsProfile))
+        {
+            <section class="mb-4">
+                <h3>Skills Profile</h3>
+                <p style="white-space:pre-wrap">@_data.SkillsProfile</p>
+            </section>
+        }
+
+        @if (_data.Experience?.Count > 0)
+        {
+            <section class="mb-4">
+                <h3>Experience</h3>
+                @foreach (var role in _data.Experience)
+                {
+                    <article class="mb-3 p-3 border rounded-3 shadow-sm">
+                        <h4 class="h6 mb-1">
+                            @role.Title
+                            @if (!string.IsNullOrWhiteSpace(role.Company))
+                            {
+                                <text> — @role.Company</text>
+                            }
+                        </h4>
+                        <div class="text-muted mb-2">
+                            @FormatPrettyRange(role.StartDate, role.EndDate)
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(role.Description))
+                        {
+                            <div style="white-space:pre-wrap">@role.Description</div>
+                        }
+                    </article>
+                }
+            </section>
+        }
+
+        @if (_data.Education?.Count > 0)
+        {
+            <section class="mb-4">
+                <h3>Education</h3>
+                @foreach (var edu in _data.Education)
+                {
+                    <div class="mb-2">
+                        <strong>@edu.Course</strong>
+                        @if (!string.IsNullOrWhiteSpace(edu.Institution))
+                        {
+                            <text> — @edu.Institution</text>
+                        }
+                        <div class="text-muted">
+                            @ToPrettyMonthYear(edu.GraduationDate)
+                            @if (!string.IsNullOrWhiteSpace(edu.Result))
+                            {
+                                <text> · @edu.Result</text>
+                            }
+                        </div>
+                    </div>
+                }
+            </section>
+        }
+
+        @if (_data.Achievements?.Count > 0)
+        {
+            <section class="mb-4">
+                <h3>Achievements</h3>
+                <ul class="mb-0">
+                    @foreach (var a in _data.Achievements)
+                    {
+                        <li>@a</li>
+                    }
+                </ul>
+            </section>
+        }
+
+        @if (_data.Skills?.Count > 0)
+        {
+            <section class="mb-4">
+                <h3>Skills</h3>
+                <p class="mb-0">@string.Join(" · ", _data.Skills)</p>
+            </section>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(_data.RawText))
+        {
+            <details class="mb-4">
+                <summary>View raw extracted text</summary>
+                <pre class="p-3 border rounded-3" style="white-space:pre-wrap">@_data.RawText</pre>
+            </details>
+        }
+    }
+</div>
+
+@code {
+    private ResumeDto? _data;
+    private string? _error;
+    private bool _loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _data = await ResumeService.ParseAsync();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static string FormatPrettyRange(string? start, string? end)
+    {
+        var s = ToPrettyMonthYear(start);
+        var e = ToPrettyMonthYear(end);
+        if (string.IsNullOrWhiteSpace(s) && string.IsNullOrWhiteSpace(e)) return "";
+        if (string.IsNullOrWhiteSpace(e)) e = "Present";
+        return $"{s} — {e}";
+    }
+
+    private static string ToPrettyMonthYear(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return "";
+        var t = raw.Trim();
+        if (t.Equals("present", StringComparison.OrdinalIgnoreCase)) return "Present";
+
+        var parts = t.Split('-', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length >= 2
+            && int.TryParse(parts[0], out var year)
+            && int.TryParse(parts[1], out var month)
+            && month is >= 1 and <= 12)
+        {
+            return $"{MonthShort(month)} {year}";
+        }
+
+        if (int.TryParse(t, out var yOnly)) return yOnly.ToString();
+        return t;
+    }
+
+    private static string MonthShort(int m) => m switch
+    {
+        1 => "Jan.",
+        2 => "Feb.",
+        3 => "Mar.",
+        4 => "Apr.",
+        5 => "May",
+        6 => "June",
+        7 => "July",
+        8 => "Aug.",
+        9 => "Sep.",
+        10 => "Oct.",
+        11 => "Nov.",
+        12 => "Dec.",
+        _ => ""
+    };
+}

@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+
+<nav class="menu">
+    <a href="/" class="brand">AndrewDaly</a>
+
+    <button class="toggle" @onclick="() => _open = !_open" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+    </button>
+
+    <ul class="menu-links @(_open ? "open" : null)">
+        <li><NavLink class="menu-link" href="/" Match="NavLinkMatch.All" ActiveClass="active">Home</NavLink></li>
+        <li><NavLink class="menu-link" href="/resume" ActiveClass="active">Resume</NavLink></li>
+        <li><NavLink class="menu-link" href="/projects" ActiveClass="active">Projects</NavLink></li>
+        <li><NavLink class="menu-link" href="/githuboverview" ActiveClass="active">Projects Overview</NavLink></li>
+        <li><NavLink class="menu-link" href="/#contact" ActiveClass="active">Contact</NavLink></li>
+    </ul>
+</nav>
+
+@code {
+    private bool _open;
+}

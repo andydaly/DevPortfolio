@@ -1,0 +1,72 @@
+
+# Build output & logs
+[Bb]in/
+[Oo]bj/
+[Aa]rtifacts/
+[Tt]est[Rr]esults/
+[Ll]og/
+*.log
+[Dd]ebug*/
+[Rr]elease*/
+
+# IDE caches & user files
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider / ReSharper (if you ever use them)
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+# IIS / IIS Express (your screenshot shows this)
+config/
+.vs/config/
+**/applicationhost.config
+
+# Publish profiles (keep out unless you really want them in git)
+*.pubxml
+*.pubxml.user
+*.Publish.xml
+
+# Local configuration & secrets
+**/appsettings*.json
+!**/appsettings.Template.json
+!**/appsettings.example.json
+secrets.json
+
+# Dev certs/keys
+*.pfx
+*.p12
+*.snk
+*.cer
+*.key
+
+# Frontend / tooling
+node_modules/
+dist/
+build/
+
+# LibMan output (ignore if you restore on build; otherwise remove this)
+wwwroot/lib/
+
+# SQLite sidecar files (safe to ignore; keep your actual .db if needed)
+*.db-shm
+*.db-wal
+
+# OS noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# GitHub Copilot for Visual Studio (what you’re seeing)
+CopilotIndices/
+
+**/appsettings*.json
+
+
+!**/appsettings.Template.json
+!**/appsettings.example.json
