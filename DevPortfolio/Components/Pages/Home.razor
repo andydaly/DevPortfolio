@@ -1,4 +1,5 @@
 ﻿@page "/"
+<PageTitle>Andrew Daly Dev Portfolio</PageTitle>
 @rendermode InteractiveServer
 @inject DevPortfolio.Services.IResumeService ResumeService
 @inject DevPortfolio.Services.IGitHubService GitHub
@@ -47,21 +48,20 @@
             @if (!string.IsNullOrWhiteSpace(MeetingUrl))
             {
                 <a class="btn-pill ghost"
-                    href="@MeetingUrl"
-                    target="_blank" rel="noopener">
-                     SCHEDULE A MEETING
+                   href="@MeetingUrl"
+                   target="_blank" rel="noopener">
+                    SCHEDULE A MEETING
                 </a>
             }
             else
             {
                 <button class="btn-pill ghost" type="button" disabled title="Scheduling link not configured">
-                 SCHEDULE A MEETING
+                    SCHEDULE A MEETING
                 </button>
-                }
+            }
         </div>
-
-        
     </div>
+
     <div class="to-about">
         <a href="#about" class="about-jump">About Me <span aria-hidden="true">▼</span></a>
         <a href="#projects" class="about-jump">Projects <span aria-hidden="true">▼</span></a>
@@ -81,9 +81,9 @@
                 {
                     <p class="muted">Loading…</p>
                 }
-                else if (!string.IsNullOrWhiteSpace(_error))
+                else if (!string.IsNullOrWhiteSpace(_resumeError))
                 {
-                    <p class="muted">@_error</p>
+                    <p class="text-danger">@_resumeError</p>
                 }
                 else if (!string.IsNullOrWhiteSpace(_profile))
                 {
@@ -105,6 +105,11 @@
 <section id="work" class="section-white">
     <div class="section-inner">
         <h2 class="section-title">Work History</h2>
+
+        @if (!_loading && !string.IsNullOrWhiteSpace(_resumeError))
+        {
+            <p class="text-danger small">@_resumeError</p>
+        }
 
         @if (_loading)
         {
@@ -155,6 +160,11 @@
     <div class="section-inner">
         <h2 class="section-title">Education</h2>
 
+        @if (!_loading && !string.IsNullOrWhiteSpace(_resumeError))
+        {
+            <p class="text-danger small">@_resumeError</p>
+        }
+
         @if (_loading)
         {
             <p class="muted">Loading…</p>
@@ -198,9 +208,9 @@
         {
             <p class="muted">Loading…</p>
         }
-        else if (!string.IsNullOrWhiteSpace(_error))
+        else if (!string.IsNullOrWhiteSpace(_reposError))
         {
-            <p class="muted">@_error</p>
+            <p class="text-danger">@_reposError</p>
         }
         else if (_projects is { Count: > 0 })
         {
@@ -221,7 +231,6 @@
                             @if (!string.IsNullOrWhiteSpace(r.Language))
                             {
                                 <span>@r.Language</span>
-                    
                                 <span> · </span>
                             }
                             <span>★ @r.Stars</span><span> · </span>
@@ -243,91 +252,101 @@
 </section>
 
 <section id="contact" class="contact-band">
-  <div class="contact-inner">
-    <div class="contact-grid">
-      <div class="contact-left">
-        <div class="contact-brand">AndrewDaly</div>
-        <a class="back-top" href="#home">Back to Top</a>
-      </div>
+    <div class="contact-inner">
+        <div class="contact-grid">
+            <div class="contact-left">
+                <div class="contact-brand">AndrewDaly</div>
+                <a class="back-top" href="#home">Back to Top</a>
+            </div>
 
-      <div class="contact-right">
-        <div class="contact-icons">
-          <a class="icon-btn" href="@(_candidate?.LinkedinUrl)"
-             target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-              <path fill="currentColor" d="M20.45 20.45h-3.555v-5.57c0-1.328-.025-3.037-1.852-3.037-1.853 0-2.136 1.448-2.136 2.945v5.662H9.35V9h3.414v1.56h.049c.475-.9 1.638-1.852 3.368-1.852 3.603 0 4.267 2.372 4.267 5.458v6.284zM5.337 7.433A2.063 2.063 0 1 1 5.332 3.31a2.063 2.063 0 0 1 .005 4.123zM7.116 20.45H3.56V9h3.556v11.45z"/>
-            </svg>
-          </a>
-          <a class="icon-btn" href="@(_candidate?.GithubUrl)"
-             target="_blank" rel="noopener" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-              <path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.637 22.42c.575.105.787-.25.787-.556 0-.275-.01-1.003-.016-1.968-3.2.695-3.878-1.543-3.878-1.543-.523-1.328-1.277-1.681-1.277-1.681-1.044-.714.079-.699.079-.699 1.153.081 1.76 1.184 1.76 1.184 1.027 1.76 2.695 1.251 3.35.956.104-.744.402-1.252.731-1.541-2.555-.291-5.24-1.277-5.24-5.683 0-1.255.45-2.281 1.184-3.086-.118-.29-.513-1.462.112-3.049 0 0 .967-.31 3.17 1.178a10.98 10.98 0 0 1 2.886-.388c.98.004 1.968.132 2.892.388 2.201-1.49 3.166-1.178 3.166-1.178.628 1.587.233 2.759.115 3.049.737.805 1.183 1.83 1.183 3.086 0 4.417-2.69 5.388-5.255 5.673.413.353.78 1.047.78 2.112 0 1.526-.014 2.756-.014 3.13 0 .31.208.671.793.555A11.5 11.5 0 0 0 12 .5z"/>
-            </svg>
-          </a>
-        </div>
+            <div class="contact-right">
+                <div class="contact-icons">
+                    <a class="icon-btn" href="@(_candidate?.LinkedinUrl)"
+                       target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                            <path fill="currentColor" d="M20.45 20.45h-3.555v-5.57c0-1.328-.025-3.037-1.852-3.037-1.853 0-2.136 1.448-2.136 2.945v5.662H9.35V9h3.414v1.56h.049c.475-.9 1.638-1.852 3.368-1.852 3.603 0 4.267 2.372 4.267 5.458v6.284zM5.337 7.433A2.063 2.063 0 1 1 5.332 3.31a2.063 2.063 0 0 1 .005 4.123zM7.116 20.45H3.56V9h3.556v11.45z" />
+                        </svg>
+                    </a>
+                    <a class="icon-btn" href="@(_candidate?.GithubUrl)"
+                       target="_blank" rel="noopener" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                            <path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.637 22.42c.575.105.787-.25.787-.556 0-.275-.01-1.003-.016-1.968-3.2.695-3.878-1.543-3.878-1.543-.523-1.328-1.277-1.681-1.277-1.681-1.044-.714.079-.699.079-.699 1.153.081 1.76 1.184 1.76 1.184 1.027 1.76 2.695 1.251 3.35.956.104-.744.402-1.252.731-1.541-2.555-.291-5.24-1.277-5.24-5.683 0-1.255.45-2.281 1.184-3.086-.118-.29-.513-1.462.112-3.049 0 0 .967-.31 3.17 1.178a10.98 10.98 0 0 1 2.886-.388c.98.004 1.968.132 2.892.388 2.201-1.49 3.166-1.178 3.166-1.178.628 1.587.233 2.759.115 3.049.737.805 1.183 1.83 1.183 3.086 0 4.417-2.69 5.388-5.255 5.673.413.353.78 1.047.78 2.112 0 1.526-.014 2.756-.014 3.13 0 .31.208.671.793.555A11.5 11.5 0 0 0 12 .5z" />
+                        </svg>
+                    </a>
+                </div>
 
-        <div class="contact-lines">
-          @if (!string.IsNullOrWhiteSpace(_candidate?.Email))
-          {
-              <div class="contact-line"><span class="label">Email:</span> <a href="mailto:@_candidate.Email">@_candidate.Email</a></div>
-          }
-          @if (!string.IsNullOrWhiteSpace(_candidate?.Phone))
-          {
-              <div class="contact-line"><span class="label">Phone:</span> @_candidate.Phone</div>
-          }
-          @if (!string.IsNullOrWhiteSpace(_candidate?.PhoneOther))
-          {
-              <div class="contact-line"><span class="label">Phone (Other):</span> @_candidate.PhoneOther</div>
-          }
+                <div class="contact-lines">
+                    @if (!string.IsNullOrWhiteSpace(_candidate?.Email))
+                    {
+                        <div class="contact-line"><span class="label">Email:</span> <a href="mailto:@_candidate.Email">@_candidate.Email</a></div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(_candidate?.Phone))
+                    {
+                        <div class="contact-line"><span class="label">Phone:</span> @_candidate.Phone</div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(_candidate?.PhoneOther))
+                    {
+                        <div class="contact-line"><span class="label">Phone (Other):</span> @_candidate.PhoneOther</div>
+                    }
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
-
 
 @code {
     private string ResumeUrl => Config["Resume:PublicUrl"]!;
     private string? MeetingUrl => Config["Meetings:ScheduleUrl"];
     private string? _profile;
-    private string? _error;
     private bool _loading = true;
 
     private DevPortfolio.Models.Candidate? _candidate;
     private List<DevPortfolio.Models.ExperienceItem> _experience = new();
-    private List<DevPortfolio.Models.EducationItem> _education = new ();
-    private List<RepoDto>? _projects;   
+    private List<DevPortfolio.Models.EducationItem> _education = new();
+    private List<RepoDto>? _projects;
 
     private bool _observersAttached = false;
     private IJSObjectReference? _module;
-
+    private string? _resumeError;
+    private string? _reposError;
 
     protected override async Task OnInitializedAsync()
     {
+        _loading = true;
+
+        var resumeTask = ResumeService.ParseAsync();
+        var reposTask = GitHub.GetReposAsync();
+
+        // Resume
         try
         {
-            var resumeTask = ResumeService.ParseAsync();
-            var reposTask  = GitHub.GetReposAsync();
-
-            await Task.WhenAll(resumeTask, reposTask);
-
             var dto = await resumeTask;
-            _candidate = dto.Candidate;  
+            _candidate = dto.Candidate;
             _profile = dto.Profile;
             _experience = dto.Experience?.ToList() ?? new();
             _education = dto.Education?.ToList() ?? new();
+        }
+        catch (Exception ex)
+        {
+            _resumeError = "Could not load profile from resume: " + ex.Message;
+        }
 
-            var repos = (await reposTask).OrderByDescending(r => r.UpdatedAt).ToList();
+        // GitHub
+        try
+        {
+            var repos = (await reposTask)
+                .OrderByDescending(r => r.UpdatedAt)
+                .ToList();
 
             var recentCount = Config.GetValue<int>("GitHub:RecentCount");
-            if (recentCount > 0) 
+            if (recentCount > 0)
                 repos = repos.Take(recentCount).ToList();
 
             _projects = repos;
         }
         catch (Exception ex)
         {
-            _error = "Could not load profile from resume: " + ex.Message;
+            _reposError = "Could not load GitHub projects: " + ex.Message + " (Add GitHub:Token to avoid API limits.)";
         }
         finally
         {
@@ -341,8 +360,8 @@
         if (!_observersAttached && !_loading)
         {
             _module ??= await JS.InvokeAsync<IJSObjectReference>("import", "/js/about-observer.js");
-            await _module.InvokeVoidAsync("observeToggle", "about"); 
-            await _module.InvokeVoidAsync("observeMany", ".reveal"); 
+            await _module.InvokeVoidAsync("observeToggle", "about");
+            await _module.InvokeVoidAsync("observeMany", ".reveal");
             _observersAttached = true;
         }
     }
@@ -352,15 +371,6 @@
             ? Array.Empty<string>()
             : text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
                   .Select(s => s.Trim('•', '-', ' ', '\t'));
-
-
-    private static string FormatRange(string? start, string? end)
-    {
-        if (string.IsNullOrWhiteSpace(start) && string.IsNullOrWhiteSpace(end)) return "";
-        var e = string.IsNullOrWhiteSpace(end) || end!.Equals("present", StringComparison.OrdinalIgnoreCase)
-                    ? "Present" : end!;
-        return $"{start} — {e}";
-    }
 
     private static string FormatPrettyRange(string? start, string? end)
     {
