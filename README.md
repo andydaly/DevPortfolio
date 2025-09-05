@@ -65,6 +65,9 @@ Create a local `appsettings.json` (do not commit). Example:
     "PerPage": 100,
     "RecentCount": 4,
     "Token": ""
+  },
+  "Site": {
+    "OwnerName": "Andrew Daly"
   }
 }
 ```
