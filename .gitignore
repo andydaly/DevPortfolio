@@ -70,3 +70,4 @@ CopilotIndices/
 
 !**/appsettings.Template.json
 !**/appsettings.example.json
+/DevPortfolio/Properties/ServiceDependencies/andrew-daly-portfolio - Zip Deploy/profile.arm.json
