@@ -1,25 +1,57 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 @inject IConfiguration Config
+@inject NavigationManager Nav
+@implements IDisposable
+@rendermode InteractiveServer
 
-<nav class="menu">
+<nav class="menu" role="navigation">
     <a href="/" class="brand">@OwnerNoSpace</a>
 
-    <button class="toggle" @onclick="() => _open = !_open" aria-label="Toggle navigation">
+    <button class="toggle"
+            type="button"
+            aria-label="Toggle navigation"
+            aria-controls="site-menu"
+            aria-expanded="@_open"
+            @onclick="Toggle">
         <span></span><span></span><span></span>
     </button>
 
-    <ul class="menu-links @(_open ? "open" : null)">
+    <ul id="site-menu" class="menu-links @(_open ? "open" : null)" @onclick="Close">
         <li><NavLink class="menu-link" href="/" Match="NavLinkMatch.All" ActiveClass="active">Home</NavLink></li>
         <li><NavLink class="menu-link" href="/resume" ActiveClass="active">Resume</NavLink></li>
         <li><NavLink class="menu-link" href="/projects" ActiveClass="active">Projects</NavLink></li>
         <li><NavLink class="menu-link" href="/githuboverview" ActiveClass="active">Projects Overview</NavLink></li>
-        <li><NavLink class="menu-link" href="/#contact" ActiveClass="active">Contact</NavLink></li>
+        <li><NavLink class="menu-link" href="/#contact">Contact</NavLink></li>
     </ul>
 </nav>
+
+<button class="menu-scrim @(_open ? "show" : null)"
+        tabindex="-1"
+        aria-hidden="true"
+        @onclick="Close"></button>
 
 @code {
     private bool _open;
 
     private string Owner => Config["Site:OwnerName"] ?? "No Name Set";
     private string OwnerNoSpace => new string(Owner.Where(c => !char.IsWhiteSpace(c)).ToArray());
+
+    void Toggle() => _open = !_open;
+    void Close()  => _open = false;
+
+    protected override void OnInitialized()
+    {
+        Nav.LocationChanged += HandleLocationChanged;
+    }
+
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        _open = false;  
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Nav.LocationChanged -= HandleLocationChanged;
+    }
 }

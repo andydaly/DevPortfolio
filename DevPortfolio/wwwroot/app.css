@@ -132,3 +132,8 @@ header.topnav .menu-link.active {
 header.topnav .menu-links {
     gap: 1.25rem;
 }
+
+.hero, .about-band, .section-white, .projects-band, .contact-band {
+    position: relative;
+    z-index: 0; 
+}
