@@ -1,5 +1,5 @@
 ﻿@page "/"
-<PageTitle>Andrew Daly Dev Portfolio</PageTitle>
+<PageTitle>@Owner Dev Portfolio</PageTitle>
 @rendermode InteractiveServer
 @inject DevPortfolio.Services.IResumeService ResumeService
 @inject DevPortfolio.Services.IGitHubService GitHub
@@ -11,7 +11,7 @@
     <div class="hero-card">
         <div class="photo-wrap">
             <img class="photo" src="images/avatarimage.jpg"
-                 alt="Andrew Daly Avatar" loading="eager" />
+                 alt="@Owner Avatar" loading="eager" />
         </div>
 
         <div class="social-strip">
@@ -31,7 +31,7 @@
 
     <div class="hero-text">
         <h1 class="headline">
-            <span class="name">Andrew Daly</span>
+            <span class="name">@Owner</span>
         </h1>
         <h2 class="role">Full Stack Software Developer</h2>
 
@@ -72,7 +72,7 @@
     <div class="about-inner">
         <div class="about-grid">
             <div class="about-media">
-                <img src="images/profileimage.jpg" alt="Andrew Daly profile" class="about-photo" loading="lazy" />
+                <img src="images/profileimage.jpg" alt="@Owner profile" class="about-photo" loading="lazy" />
             </div>
             <div class="about-copy">
                 <h2>About Me</h2>
@@ -255,7 +255,7 @@
     <div class="contact-inner">
         <div class="contact-grid">
             <div class="contact-left">
-                <div class="contact-brand">AndrewDaly</div>
+                <div class="contact-brand">@OwnerNoSpace</div>
                 <a class="back-top" href="#home">Back to Top</a>
             </div>
 
@@ -295,6 +295,8 @@
 </section>
 
 @code {
+    private string Owner => Config["Site:OwnerName"] ?? "No Name Set";
+    private string OwnerNoSpace => new string(Owner.Where(c => !char.IsWhiteSpace(c)).ToArray());
     private string ResumeUrl => Config["Resume:PublicUrl"]!;
     private string? MeetingUrl => Config["Meetings:ScheduleUrl"];
     private string? _profile;
