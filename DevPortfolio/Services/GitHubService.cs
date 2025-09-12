@@ -32,12 +32,10 @@ namespace DevPortfolio.Services
             if (!string.IsNullOrWhiteSpace(_opts.Token))
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _opts.Token);
 
-            var endpoint = $"users/{username}/repos?sort=updated&per_page={_opts.PerPage}";
+            var endpoint = $"users/{username}/repos?sort=created&direction=desc&per_page={_opts.PerPage}";
             var repos = await client.GetFromJsonAsync<List<RepoDto>>(endpoint, ct) ?? new List<RepoDto>();
 
-            return repos.Where(r => !r.Archived)
-                        .OrderByDescending(r => r.UpdatedAt)
-                        .ToList();
+            return repos.Where(r => !r.Archived).ToList();
         }
 
         public async Task<IReadOnlyList<RepoDto>> GetRecentReposAsync(CancellationToken ct = default)

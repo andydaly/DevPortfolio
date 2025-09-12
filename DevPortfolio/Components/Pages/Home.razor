@@ -336,9 +336,7 @@
         // GitHub
         try
         {
-            var repos = (await reposTask)
-                .OrderByDescending(r => r.UpdatedAt)
-                .ToList();
+            var repos = (await reposTask).ToList();
 
             var recentCount = Config.GetValue<int>("GitHub:RecentCount");
             if (recentCount > 0)
