@@ -198,7 +198,11 @@
     {
         if (string.IsNullOrWhiteSpace(raw)) return "";
         var t = raw.Trim();
-        if (t.Equals("present", StringComparison.OrdinalIgnoreCase)) return "Present";
+
+        if (t.Equals("present", StringComparison.OrdinalIgnoreCase) ||
+            t.Equals("current", StringComparison.OrdinalIgnoreCase) ||
+            t.Equals("now", StringComparison.OrdinalIgnoreCase))
+            return "Present";
 
         var parts = t.Split('-', StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length >= 2

@@ -123,7 +123,11 @@
                     <article class="entry reveal">
                         <header class="entry-head">
                             <h3 class="entry-title">
-                                @job.Title <span class="at">• @job.Company</span>
+                                @job.Title
+                                @if (!string.IsNullOrWhiteSpace(job.Company))
+                                {
+                                    <span class="at">• @job.Company</span>
+                                }
                             </h3>
                             <div class="entry-dates">@FormatPrettyRange(job.StartDate, job.EndDate)</div>
                         </header>
@@ -386,7 +390,9 @@
         if (string.IsNullOrWhiteSpace(raw)) return "";
         var t = raw.Trim();
 
-        if (t.Equals("present", StringComparison.OrdinalIgnoreCase))
+        if (t.Equals("present", StringComparison.OrdinalIgnoreCase) ||
+            t.Equals("current", StringComparison.OrdinalIgnoreCase) ||
+            t.Equals("now", StringComparison.OrdinalIgnoreCase))
             return "Present";
 
         var parts = t.Split('-', StringSplitOptions.RemoveEmptyEntries);
@@ -398,8 +404,7 @@
             return $"{MonthShort(month)} {year}";
         }
 
-        if (int.TryParse(t, out var y)) return y.ToString();
-
+        if (int.TryParse(t, out var yOnly)) return yOnly.ToString();
         return t;
     }
 
